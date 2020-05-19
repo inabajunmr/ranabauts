@@ -1,2 +1,2 @@
-# beami
-Test application for coordination between microservices.
+# ranabauts
+ranabauts is Test application for coordination between microservices.
