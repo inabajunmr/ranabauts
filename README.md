@@ -50,7 +50,7 @@ Call `url` with POST method and commands body.
 When this command call like follow example, http body is `commands` array.
 
 ### request
-```
+```json
 {
     "commands": [
         {
@@ -84,7 +84,7 @@ When this command call like follow example, http body is `commands` array.
 ```
 
 ### b request body
-```
+```json
 {
     "type": "HTTP",
     "uri": "http://b.example.com",
@@ -113,7 +113,7 @@ When this command call like follow example, http body is `commands` array.
 b execute each commands.
 
 ### c request body
-```
+```json
 {
     "type": "HTTP",
     "uri": "http://c.example.com",
@@ -126,6 +126,7 @@ b execute each commands.
 c don't has command so just return response.
 
 ### d request body
+```json
 {
     "type": "HTTP",
     "uri": "http://d.example.com",
@@ -133,6 +134,7 @@ c don't has command so just return response.
         "status": 200
     }
 }
+```
 
 d don't has command so just return response.
 

@@ -1,0 +1,28 @@
+name: build-and-push-image
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 1.11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.11
+    - name: build app
+      run: ./gradlew build
+    - name: GitHub Environment Variables Action
+      uses: FranzDiebold/github-env-vars-action@v1.0.0
+    - name: docker login
+      run: docker login docker.pkg.github.com -u inabajunmr -p ${{ secrets.GITHUB_TOKEN }}
+    - name: build image
+      run: docker build -t docker.pkg.github.com/${{ github.repository }}/ranabauts-server:$GITHUB_SHA_SHORT .
+    - name: name
+      run: docker images
+    - name: push image
+      run: docker push docker.pkg.github.com/${{ github.repository }}/ranabauts-server:$GITHUB_SHA_SHORT
