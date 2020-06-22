@@ -26,10 +26,22 @@ dependencies {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 	}
 
+	// json
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.0")
+
+	// log
 	implementation("ch.qos.logback:logback-classic")
 	implementation("ch.qos.logback:logback-core")
 	implementation("ch.qos.logback.contrib:logback-json-classic:0.1.5")
 	implementation("ch.qos.logback.contrib:logback-jackson:0.1.5")
+
+	// HTTP client
+	implementation("com.squareup.okhttp3:okhttp")
+
+	// test
+	testImplementation("com.squareup.okhttp3:mockwebserver")
+
+
 }
 
 tasks.withType<Test> {

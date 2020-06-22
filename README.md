@@ -5,6 +5,8 @@ ranabauts is Test application for coordination between microservices.
 a call with
 ```json
 {
+    "type": "HTTP",
+    "uri": "http://b.example.com",
     "commands": [
         {
             "type": "HTTP",
