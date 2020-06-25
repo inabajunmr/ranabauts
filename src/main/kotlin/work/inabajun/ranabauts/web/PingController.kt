@@ -20,7 +20,7 @@ class PingController {
      * @param status HTTP status code
      */
     @GetMapping("/ping")
-    fun echo(@RequestParam("status") status: Int): ResponseEntity<String> {
+    fun ping(@RequestParam("status") status: Int): ResponseEntity<String> {
         logger.info("Call ping. Status:{}", status)
         return ResponseEntity.status(status).body("ok")
     }

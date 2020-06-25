@@ -1,6 +1,7 @@
 package work.inabajun.ranabauts.domain.command
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import java.lang.Exception
 import java.net.URL
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
@@ -25,11 +26,15 @@ class HTTPCommand(uri: URL, response: Response, commands: List<Command>) : Comma
     val uri: URL = uri
 
     override fun execute() {
-        val client = OkHttpClient()
-        val body = RequestBody.create(JSON_MEDIA_TYPE, serializeJson())
-        val request = Request.Builder().url(uri).post(body).build()
-        val response = client.newCall(request).execute()
-        logger.info("Call:$uri. Status:${response.code()}. Body:${response.body()?.string()}")
+
+        try { val client = OkHttpClient()
+            val body = RequestBody.create(JSON_MEDIA_TYPE, serializeJson())
+            val request = Request.Builder().url(uri).post(body).build()
+            val response = client.newCall(request).execute()
+            logger.info("Call:$uri. Status:${response.code()}. Body:${response.body()?.string()}")
+        } catch (e: Exception) {
+            logger.error("Failed to call:$uri. message:${e.message}")
+        }
     }
 
     private fun serializeJson(): String {

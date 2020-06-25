@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import java.net.URL
 import java.util.Collections
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.ResponseStatus
 import work.inabajun.ranabauts.domain.command.Command
 import work.inabajun.ranabauts.domain.command.CommandType
 import work.inabajun.ranabauts.domain.command.HTTPCommand
@@ -116,6 +117,7 @@ class CommandDeserializer(vc: Class<Command>?) : StdDeserializer<Command>(vc) {
 /**
  * Command JSON is invalid.
  */
+@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 class IllegalCommandException(message: String?, cause: Throwable?) : RuntimeException(message, cause) {
     constructor(message: String?) : this(message, null)
 }

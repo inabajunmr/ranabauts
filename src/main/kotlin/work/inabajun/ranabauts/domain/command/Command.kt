@@ -31,7 +31,7 @@ abstract class Command(response: Response, commands: List<Command>, commandType:
      *
      * @return
      */
-    fun executeCommands(): Response? {
+    fun executeCommands(): Response {
         commands?.forEach(Consumer { c: Command -> c.execute() })
         return response
     }
