@@ -1,0 +1,10 @@
+@startuml
+Client -> "ranabauts A" ++
+"ranabauts A" -> "ranabauts B" ++
+"ranabauts B" -> "ranabauts C" ++
+return
+"ranabauts B" -> "ranabauts D" ++
+return
+return
+return
+@enduml
