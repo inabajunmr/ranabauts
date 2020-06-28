@@ -20,6 +20,9 @@ abstract class Command(response: Response, commands: List<Command>, commandType:
      */
     val commands: List<Command> = commands
 
+    /**
+     * Command type
+     */
     val type: CommandType = commandType
 
     /**
@@ -28,8 +31,8 @@ abstract class Command(response: Response, commands: List<Command>, commandType:
     protected abstract fun execute()
 
     /**
-     *
-     * @return
+     * execute commands that this command has
+     * @return response
      */
     fun executeCommands(): Response {
         commands?.forEach(Consumer { c: Command -> c.execute() })
