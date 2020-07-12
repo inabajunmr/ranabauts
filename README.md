@@ -112,3 +112,11 @@ POST /commands
     }
 }
 ```
+
+## Configuration
+### Environment variables
+
+| name | description |
+| ---- | ----------- |
+| SPRING_SECURITY_USER_NAME | Basic authentication username. If this value is null, no authentication needs to access. |
+| SPRING_SECURITY_USER_PASSWORD | Basic authentication password. |
