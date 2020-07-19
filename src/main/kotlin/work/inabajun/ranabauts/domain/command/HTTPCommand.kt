@@ -41,4 +41,8 @@ class HTTPCommand(uri: URL, response: Response, commands: List<Command>) : Comma
         val mapper = jacksonObjectMapper()
         return mapper.writeValueAsString(this)
     }
+
+    override fun toString(): String {
+        return serializeJson()
+    }
 }

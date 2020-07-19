@@ -17,12 +17,11 @@ class BasicAuthenticationTest(@Autowired val template: TestRestTemplate) {
     fun basicAuthenticationTest() {
 
         // 401
-        val entity401 = template.withBasicAuth("user", "wrong").getForEntity<String>("/ping?status=200")
+        val entity401 = template.withBasicAuth("user", "wrong").getForEntity<String>("/")
         assertThat(entity401.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
 
         // 200
-        val entity200 = template.withBasicAuth("user", "passwd").getForEntity<String>("/ping?status=200")
-        assertThat(entity200.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(entity200.body).contains("ok")
-    }
+        val entity200 = template.withBasicAuth("user", "passwd").getForEntity<String>("/")
+        assertThat(entity200.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
+            }
 }
