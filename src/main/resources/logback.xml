@@ -12,6 +12,8 @@
         </encoder>
     </appender>
 
+    <logger name="work.inabajun.ranabauts" level="INFO"/>
+
     <root>
         <appender-ref ref="STDOUT" />
     </root>

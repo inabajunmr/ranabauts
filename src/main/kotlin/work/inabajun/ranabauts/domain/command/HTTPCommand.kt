@@ -28,10 +28,10 @@ class HTTPCommand(uri: URL, response: Response, commands: List<Command>) : Comma
     override fun execute() {
 
         try { val client = OkHttpClient()
-            val body = RequestBody.create(JSON_MEDIA_TYPE, serializeJson())
-            val request = Request.Builder().url(uri).post(body).build()
+            val requestBody = serializeJson()
+            val request = Request.Builder().url(uri).post(RequestBody.create(JSON_MEDIA_TYPE, requestBody)).build()
             val response = client.newCall(request).execute()
-            logger.info("Call:$uri. Status:${response.code()}. Request Body:$body Response Body:${response.body()?.string()}")
+            logger.info("Call:$uri. Status:${response.code()}. Request Body:$requestBody Response Body:${response.body()?.string()}")
         } catch (e: Exception) {
             logger.error("Failed to call:$uri. message:${e.message}")
         }
