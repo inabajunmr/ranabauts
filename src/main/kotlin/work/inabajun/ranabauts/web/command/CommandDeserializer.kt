@@ -93,8 +93,7 @@ class CommandDeserializer(vc: Class<Command>?) : StdDeserializer<Command>(vc) {
         }
 
         try {
-            val statusCode = HttpStatus.valueOf(statusNode.intValue())
-            return Response(statusCode)
+            return Response(statusNode.intValue())
         } catch (e: java.lang.IllegalArgumentException) {
             throw IllegalCommandException("'response.status':${statusNode.intValue()} is not appropriate status code.", e)
         }

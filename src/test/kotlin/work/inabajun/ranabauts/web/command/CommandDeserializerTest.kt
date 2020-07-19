@@ -44,7 +44,7 @@ internal class CommandDeserializerTest {
         val actual: Command = sut.readValue(input)
 
         // verify
-        assertHTTPCommand(actual, HttpStatus.OK, Collections.emptyList(), "http://example.com")
+        assertHTTPCommand(actual, HttpStatus.OK.value(), Collections.emptyList(), "http://example.com")
     }
 
     @Test
@@ -74,8 +74,8 @@ internal class CommandDeserializerTest {
         val actual: Command = sut.readValue(input)
 
         // verify
-        assertHTTPCommand(actual, HttpStatus.CREATED, null, "http://example.com/p")
-        assertHTTPCommand(actual.commands[0], HttpStatus.OK, Collections.emptyList(), "http://example.com/c")
+        assertHTTPCommand(actual, HttpStatus.CREATED.value(), null, "http://example.com/p")
+        assertHTTPCommand(actual.commands[0], HttpStatus.OK.value(), Collections.emptyList(), "http://example.com/c")
         assertThat(actual.commands.size).isEqualTo(1)
     }
 
@@ -114,9 +114,9 @@ internal class CommandDeserializerTest {
         val actual: Command = sut.readValue(input)
 
         // verify
-        assertHTTPCommand(actual, HttpStatus.ACCEPTED, null, "http://example.com/p1")
-        assertHTTPCommand(actual.commands[0], HttpStatus.OK, Collections.emptyList(), "http://example.com/c1")
-        assertHTTPCommand(actual.commands[1], HttpStatus.CREATED, Collections.emptyList(), "http://example.com/c2")
+        assertHTTPCommand(actual, HttpStatus.ACCEPTED.value(), null, "http://example.com/p1")
+        assertHTTPCommand(actual.commands[0], HttpStatus.OK.value(), Collections.emptyList(), "http://example.com/c1")
+        assertHTTPCommand(actual.commands[1], HttpStatus.CREATED.value(), Collections.emptyList(), "http://example.com/c2")
         assertThat(actual.commands.size).isEqualTo(2)
     }
 
@@ -156,9 +156,9 @@ internal class CommandDeserializerTest {
         val actual: Command = sut.readValue(input)
 
         // verify
-        assertHTTPCommand(actual, HttpStatus.CREATED, null, "http://example.com/p")
-        assertHTTPCommand(actual.commands[0], HttpStatus.OK, null, "http://example.com/c")
-        assertHTTPCommand(actual.commands[0].commands[0], HttpStatus.ACCEPTED, Collections.emptyList(), "http://example.com/cc")
+        assertHTTPCommand(actual, HttpStatus.CREATED.value(), null, "http://example.com/p")
+        assertHTTPCommand(actual.commands[0], HttpStatus.OK.value(), null, "http://example.com/c")
+        assertHTTPCommand(actual.commands[0].commands[0], HttpStatus.ACCEPTED.value(), Collections.emptyList(), "http://example.com/cc")
         assertThat(actual.commands.size).isEqualTo(1)
         assertThat(actual.commands[0].commands.size).isEqualTo(1)
     }
@@ -180,7 +180,7 @@ internal class CommandDeserializerTest {
         val actual: Command = sut.readValue(input)
 
         // verify
-        assertHTTPCommand(actual, HttpStatus.OK, Collections.emptyList(), "http://example.com")
+        assertHTTPCommand(actual, HttpStatus.OK.value(), Collections.emptyList(), "http://example.com")
     }
 
     @Test
@@ -212,7 +212,7 @@ internal class CommandDeserializerTest {
                "type":"HTTP",
                "uri":"http://example.com",
                "response": {
-                   "status":1000
+                   "status":"aaa"
                }
             }
         """
@@ -224,7 +224,7 @@ internal class CommandDeserializerTest {
         assertThat(actual).isInstanceOf(IllegalCommandException::class.java)
     }
 
-    private fun assertHTTPCommand(actual: Command, status: HttpStatus, commands: List<Command>?, uri: String) {
+    private fun assertHTTPCommand(actual: Command, status: Int, commands: List<Command>?, uri: String) {
         // verify
         assertThat(actual.response.status).isEqualTo(status)
         assertThat(actual.type).isEqualTo(CommandType.HTTP)

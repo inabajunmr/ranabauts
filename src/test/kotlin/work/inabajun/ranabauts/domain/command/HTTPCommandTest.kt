@@ -28,7 +28,7 @@ internal class HTTPCommandTest {
     fun test_NoCommand() {
 
         // setup
-        val rootCommand = HTTPCommand(URL("http://example.com"), Response(HttpStatus.OK), emptyList())
+        val rootCommand = HTTPCommand(URL("http://example.com"), Response(HttpStatus.OK.value()), emptyList())
 
         // execute
         rootCommand.executeCommands()
@@ -41,8 +41,8 @@ internal class HTTPCommandTest {
     fun test_SingleCommand() {
 
         // setup
-        val childCommand = HTTPCommand(assembleMockEndpoint(webServer!!), Response(HttpStatus.OK), emptyList())
-        val rootCommand = HTTPCommand(URL("http://example.com"), Response(HttpStatus.OK), listOf(childCommand))
+        val childCommand = HTTPCommand(assembleMockEndpoint(webServer!!), Response(HttpStatus.OK.value()), emptyList())
+        val rootCommand = HTTPCommand(URL("http://example.com"), Response(HttpStatus.OK.value()), listOf(childCommand))
 
         // execute
         rootCommand.executeCommands()
@@ -61,9 +61,9 @@ internal class HTTPCommandTest {
     fun test_MultipleCommand() {
 
         // setup
-        val childCommand1 = HTTPCommand(assembleMockEndpoint(webServer!!), Response(HttpStatus.OK), emptyList())
-        val childCommand2 = HTTPCommand(assembleMockEndpoint(webServer!!), Response(HttpStatus.OK), emptyList())
-        val rootCommand = HTTPCommand(URL("http://example.com"), Response(HttpStatus.OK), listOf(childCommand1, childCommand2))
+        val childCommand1 = HTTPCommand(assembleMockEndpoint(webServer!!), Response(HttpStatus.OK.value()), emptyList())
+        val childCommand2 = HTTPCommand(assembleMockEndpoint(webServer!!), Response(HttpStatus.OK.value()), emptyList())
+        val rootCommand = HTTPCommand(URL("http://example.com"), Response(HttpStatus.OK.value()), listOf(childCommand1, childCommand2))
 
         // execute
         rootCommand.executeCommands()
