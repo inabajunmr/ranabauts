@@ -21,22 +21,6 @@ This sample is described at following Command endpoint sample section.
 
 ## Endpoints
 
-### Ping
-
-Ping just returns specified status.
-
-#### Parameters
-
-| param | name | type | description |
-| --- | --- | --- | --- |
-| query | status | number | status code |
-
-#### Sample
-
-```
-GET /ping?status=200
-```
-
 ### Command
 
 Command can executes multiple commands such as HTTP request.
