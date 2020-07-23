@@ -13,6 +13,7 @@
     </appender>
 
     <logger name="work.inabajun.ranabauts" level="INFO"/>
+    <logger name="org.springframework" level="INFO"/>
 
     <root>
         <appender-ref ref="STDOUT" />

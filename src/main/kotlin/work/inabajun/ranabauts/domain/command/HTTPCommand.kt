@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory
 /**
  * Command expresses HTTP request
  */
-class HTTPCommand(uri: URL, response: Response, commands: List<Command>) : Command(response, commands, CommandType.HTTP) {
+class HTTPCommand(uri: URL, commands: List<Command>) : Command(commands, CommandType.HTTP) {
 
     companion object {
         private val JSON_MEDIA_TYPE: MediaType = MediaType.get("application/json; charset=utf-8")
@@ -25,15 +25,18 @@ class HTTPCommand(uri: URL, response: Response, commands: List<Command>) : Comma
      */
     val uri: URL = uri
 
-    override fun execute() {
+    override fun execute(): HttpResult {
 
         try { val client = OkHttpClient()
             val requestBody = serializeJson()
             val request = Request.Builder().url(uri).post(RequestBody.create(JSON_MEDIA_TYPE, requestBody)).build()
             val response = client.newCall(request).execute()
-            logger.info("Call:$uri. Status:${response.code()}. Request Body:$requestBody Response Body:${response.body()?.string()}")
+            val responseBody = response.body()?.string()
+            logger.info("Call:$uri. Status:${response.code()}. Request Body:$requestBody Response Body:$responseBody")
+            return HttpResult(responseBody)
         } catch (e: Exception) {
-            logger.error("Failed to call:$uri. message:${e.message}")
+            logger.error("Failed to call:$uri. message:${e.message}", e)
+            return HttpResult("Failed to call:$uri. message:${e.message}")
         }
     }
 

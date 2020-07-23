@@ -37,7 +37,6 @@ Command can executes multiple commands such as HTTP request.
 | --- | --- | --- |
 | type | string | HTTP |
 | uri | string | URI |
-| response.status | number | Status code for response |
 | commands | array<Command> | Command list for next hop |
 
 #### Sample
@@ -73,27 +72,15 @@ POST /commands
             "commands": [
                 {
                     "type": "HTTP",
-                    "uri": "http://c.example.com",
-                    "response": {
-                        "status": 200
-                    }
+                    "uri": "http://c.example.com"
                 },
                 {
                     "type": "HTTP",
-                    "uri": "http://d.example.com",
-                    "response": {
-                        "status": 200
-                    }
+                    "uri": "http://d.example.com"
                 }
-            ],
-            "response": {
-                "status": 200
-            }
+            ]
         }
-    ],
-    "response": {
-        "status": 200
-    }
+    ]
 }
 ```
 

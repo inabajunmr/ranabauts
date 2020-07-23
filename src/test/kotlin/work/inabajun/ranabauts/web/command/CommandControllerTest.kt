@@ -31,7 +31,15 @@ internal class CommandControllerTest(@Autowired val restTemplate: TestRestTempla
                         "response":{
                             "status":200
                         }
-                    }
+                    },
+                    {
+                        "type":"HTTP",
+                        "uri":"http://example.com/c",
+                        "commands":[],
+                        "response":{
+                            "status":200
+                        }
+                    }                    
                 ],
                "response":{
                    "status":201
@@ -45,6 +53,8 @@ internal class CommandControllerTest(@Autowired val restTemplate: TestRestTempla
                 .body(input), String::class.java)
 
         // verify
-        assertThat(actual.statusCode).isEqualTo(HttpStatus.CREATED)
+        assertThat(actual.statusCode).isEqualTo(HttpStatus.OK)
+        println("=======")
+        println(actual.body)
     }
 }

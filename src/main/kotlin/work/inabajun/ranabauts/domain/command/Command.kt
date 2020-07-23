@@ -1,19 +1,12 @@
 package work.inabajun.ranabauts.domain.command
 
-import java.util.function.Consumer
-
 /**
  * Command is series of commands and response for application.
  *
  * Application that accepts this command executes series of commands and return response.
  * This command will be accepted via HTTP request.
  */
-abstract class Command(response: Response, commands: List<Command>, commandType: CommandType) {
-
-    /**
-     * HTTP Response for an application that accepts this command
-     */
-    val response: Response = response
+abstract class Command(commands: List<Command>, commandType: CommandType) {
 
     /**
      * Command List to execute by an application that accepts this command
@@ -28,14 +21,14 @@ abstract class Command(response: Response, commands: List<Command>, commandType:
     /**
      * execute this command
      */
-    protected abstract fun execute()
+    protected abstract fun execute(): HttpResult
 
     /**
      * execute commands that this command has
      * @return response
      */
-    fun executeCommands(): Response {
-        commands?.forEach(Consumer { c: Command -> c.execute() })
-        return response
+    fun executeCommands(): HttpResult {
+        val results = commands.map { c: Command -> c.execute() }.toList()
+        return HttpResult(results)
     }
 }
