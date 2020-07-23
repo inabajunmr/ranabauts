@@ -8,7 +8,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.http.HttpStatus
 
 internal class HTTPCommandTest {
 
@@ -28,7 +27,7 @@ internal class HTTPCommandTest {
     fun test_NoCommand() {
 
         // setup
-        val rootCommand = HTTPCommand(URL("http://example.com"), Response(HttpStatus.OK.value()), emptyList())
+        val rootCommand = HTTPCommand(URL("http://example.com"), emptyList())
 
         // execute
         rootCommand.executeCommands()
@@ -41,8 +40,8 @@ internal class HTTPCommandTest {
     fun test_SingleCommand() {
 
         // setup
-        val childCommand = HTTPCommand(assembleMockEndpoint(webServer!!), Response(HttpStatus.OK.value()), emptyList())
-        val rootCommand = HTTPCommand(URL("http://example.com"), Response(HttpStatus.OK.value()), listOf(childCommand))
+        val childCommand = HTTPCommand(assembleMockEndpoint(webServer!!), emptyList())
+        val rootCommand = HTTPCommand(URL("http://example.com"), listOf(childCommand))
 
         // execute
         rootCommand.executeCommands()
@@ -61,9 +60,9 @@ internal class HTTPCommandTest {
     fun test_MultipleCommand() {
 
         // setup
-        val childCommand1 = HTTPCommand(assembleMockEndpoint(webServer!!), Response(HttpStatus.OK.value()), emptyList())
-        val childCommand2 = HTTPCommand(assembleMockEndpoint(webServer!!), Response(HttpStatus.OK.value()), emptyList())
-        val rootCommand = HTTPCommand(URL("http://example.com"), Response(HttpStatus.OK.value()), listOf(childCommand1, childCommand2))
+        val childCommand1 = HTTPCommand(assembleMockEndpoint(webServer!!), emptyList())
+        val childCommand2 = HTTPCommand(assembleMockEndpoint(webServer!!), emptyList())
+        val rootCommand = HTTPCommand(URL("http://example.com"), listOf(childCommand1, childCommand2))
 
         // execute
         rootCommand.executeCommands()

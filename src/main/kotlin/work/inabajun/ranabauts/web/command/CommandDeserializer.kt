@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import work.inabajun.ranabauts.domain.command.Command
 import work.inabajun.ranabauts.domain.command.CommandType
 import work.inabajun.ranabauts.domain.command.HTTPCommand
-import work.inabajun.ranabauts.domain.command.Response
 
 /**
  * Jackson deserializer for command
@@ -34,9 +33,8 @@ class CommandDeserializer(vc: Class<Command>?) : StdDeserializer<Command>(vc) {
         val type = parseType(command)
         if (type == CommandType.HTTP) {
             val uri = parseURI(command)
-            val response = parseResponse(command)
             val commands = parseCommands(command)
-            return HTTPCommand(uri, response, commands)
+            return HTTPCommand(uri, commands)
         } else {
             throw IllegalCommandException("This type:${type.name} is not implemented.")
         }
@@ -74,28 +72,6 @@ class CommandDeserializer(vc: Class<Command>?) : StdDeserializer<Command>(vc) {
             return URL(uri.textValue())
         } catch (e: IllegalArgumentException) {
             throw IllegalCommandException("URI:${uri.textValue()} is invalid.", e)
-        }
-    }
-
-    private fun parseResponse(command: JsonNode): Response {
-        if (!command.has("response")) {
-            throw IllegalCommandException("Command needs 'response' field.")
-        }
-
-        val response = command.get("response")
-        if (!response.isObject) {
-            throw IllegalCommandException("'response' field required object value. It needs 'status' field.")
-        }
-
-        val statusNode = response.get("status")
-        if (!statusNode.isNumber) {
-            throw IllegalCommandException("'response.status' field required number value.")
-        }
-
-        try {
-            return Response(statusNode.intValue())
-        } catch (e: java.lang.IllegalArgumentException) {
-            throw IllegalCommandException("'response.status':${statusNode.intValue()} is not appropriate status code.", e)
         }
     }
 

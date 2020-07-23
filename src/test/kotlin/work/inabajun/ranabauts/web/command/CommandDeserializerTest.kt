@@ -9,7 +9,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.assertj.core.api.Assertions.fail
 import org.junit.jupiter.api.Test
-import org.springframework.http.HttpStatus
 import work.inabajun.ranabauts.domain.command.Command
 import work.inabajun.ranabauts.domain.command.CommandType
 import work.inabajun.ranabauts.domain.command.HTTPCommand
@@ -33,10 +32,7 @@ internal class CommandDeserializerTest {
             {
                "type":"HTTP",
                "uri":"http://example.com",
-               "commands":[],
-               "response": {
-                   "status":200
-               }
+               "commands":[]
             }
         """
 
@@ -44,7 +40,7 @@ internal class CommandDeserializerTest {
         val actual: Command = sut.readValue(input)
 
         // verify
-        assertHTTPCommand(actual, HttpStatus.OK.value(), Collections.emptyList(), "http://example.com")
+        assertHTTPCommand(actual, Collections.emptyList(), "http://example.com")
     }
 
     @Test
@@ -58,15 +54,9 @@ internal class CommandDeserializerTest {
                     {
                         "type":"HTTP",
                         "uri":"http://example.com/c",
-                        "commands":[],
-                        "response":{
-                            "status":200
-                        }
+                        "commands":[]
                     }
-                ],
-               "response":{
-                   "status":201
-               }
+                ]
             }
         """
 
@@ -74,8 +64,8 @@ internal class CommandDeserializerTest {
         val actual: Command = sut.readValue(input)
 
         // verify
-        assertHTTPCommand(actual, HttpStatus.CREATED.value(), null, "http://example.com/p")
-        assertHTTPCommand(actual.commands[0], HttpStatus.OK.value(), Collections.emptyList(), "http://example.com/c")
+        assertHTTPCommand(actual, null, "http://example.com/p")
+        assertHTTPCommand(actual.commands[0], Collections.emptyList(), "http://example.com/c")
         assertThat(actual.commands.size).isEqualTo(1)
     }
 
@@ -90,23 +80,14 @@ internal class CommandDeserializerTest {
                     {
                         "type":"HTTP",
                         "uri":"http://example.com/c1",
-                        "commands":[],
-                        "response":{
-                            "status":200
-                        }
+                        "commands":[]
                     },
                     {
                         "type":"HTTP",
                         "uri":"http://example.com/c2",
-                        "commands":[],
-                        "response":{
-                            "status":201
-                        }
+                        "commands":[]
                     }
-                ],
-               "response":{
-                   "status":202
-               }
+                ]
             }
         """
 
@@ -114,9 +95,9 @@ internal class CommandDeserializerTest {
         val actual: Command = sut.readValue(input)
 
         // verify
-        assertHTTPCommand(actual, HttpStatus.ACCEPTED.value(), null, "http://example.com/p1")
-        assertHTTPCommand(actual.commands[0], HttpStatus.OK.value(), Collections.emptyList(), "http://example.com/c1")
-        assertHTTPCommand(actual.commands[1], HttpStatus.CREATED.value(), Collections.emptyList(), "http://example.com/c2")
+        assertHTTPCommand(actual, null, "http://example.com/p1")
+        assertHTTPCommand(actual.commands[0], Collections.emptyList(), "http://example.com/c1")
+        assertHTTPCommand(actual.commands[1], Collections.emptyList(), "http://example.com/c2")
         assertThat(actual.commands.size).isEqualTo(2)
     }
 
@@ -135,20 +116,11 @@ internal class CommandDeserializerTest {
                             {
                                 "type":"HTTP",
                                 "uri":"http://example.com/cc",
-                                "commands":[],
-                                "response":{
-                                    "status":202
-                                }
+                                "commands":[]
                             }                            
-                        ],
-                        "response":{
-                            "status":200
-                        }
+                        ]
                     }
-                ],
-               "response":{
-                   "status":201
-               }
+                ]
             }
         """
 
@@ -156,9 +128,9 @@ internal class CommandDeserializerTest {
         val actual: Command = sut.readValue(input)
 
         // verify
-        assertHTTPCommand(actual, HttpStatus.CREATED.value(), null, "http://example.com/p")
-        assertHTTPCommand(actual.commands[0], HttpStatus.OK.value(), null, "http://example.com/c")
-        assertHTTPCommand(actual.commands[0].commands[0], HttpStatus.ACCEPTED.value(), Collections.emptyList(), "http://example.com/cc")
+        assertHTTPCommand(actual, null, "http://example.com/p")
+        assertHTTPCommand(actual.commands[0], null, "http://example.com/c")
+        assertHTTPCommand(actual.commands[0].commands[0], Collections.emptyList(), "http://example.com/cc")
         assertThat(actual.commands.size).isEqualTo(1)
         assertThat(actual.commands[0].commands.size).isEqualTo(1)
     }
@@ -169,10 +141,7 @@ internal class CommandDeserializerTest {
         val input = """
             {
                "type":"HTTP",
-               "uri":"http://example.com",
-               "response": {
-                   "status":200
-               }
+               "uri":"http://example.com"
             }
         """
 
@@ -180,7 +149,7 @@ internal class CommandDeserializerTest {
         val actual: Command = sut.readValue(input)
 
         // verify
-        assertHTTPCommand(actual, HttpStatus.OK.value(), Collections.emptyList(), "http://example.com")
+        assertHTTPCommand(actual, Collections.emptyList(), "http://example.com")
     }
 
     @Test
@@ -189,10 +158,7 @@ internal class CommandDeserializerTest {
         val input = """
             {
                "type":"UNKNOWN",
-               "uri":"http://example.com",
-               "response": {
-                   "status":200
-               }
+               "uri":"http://example.com"
             }
         """
 
@@ -204,29 +170,8 @@ internal class CommandDeserializerTest {
         assertThat(actual).isInstanceOf(IllegalCommandException::class.java)
     }
 
-    @Test
-    fun deserialize_IllegalResponse() {
-        // setup
-        val input = """
-            {
-               "type":"HTTP",
-               "uri":"http://example.com",
-               "response": {
-                   "status":"aaa"
-               }
-            }
-        """
-
-        // exercise
-        val actual = catchThrowable { sut.readValue<Command>(input) }
-
+    private fun assertHTTPCommand(actual: Command, commands: List<Command>?, uri: String) {
         // verify
-        assertThat(actual).isInstanceOf(IllegalCommandException::class.java)
-    }
-
-    private fun assertHTTPCommand(actual: Command, status: Int, commands: List<Command>?, uri: String) {
-        // verify
-        assertThat(actual.response.status).isEqualTo(status)
         assertThat(actual.type).isEqualTo(CommandType.HTTP)
         if (commands != null) {
             assertThat(actual.commands).isEqualTo(commands)
